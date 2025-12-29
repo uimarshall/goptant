@@ -1,13 +1,13 @@
-import Link from 'next/link';
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuList,
-} from '@/components/ui/navigation-menu';
-import { Button } from '@/components/ui/button';
+} from "@/components/ui/navigation-menu";
 
 function Navbar() {
-  const flexContainerClasses = 'flex items-center justify-between';
+  const flexContainerClasses = "flex items-center justify-between";
 
   return (
     <nav className="w-full border-b bg-white/80 backdrop-blur-sm supports-backdrop-filter:bg-white/60 sticky top-0 z-50">
@@ -21,7 +21,7 @@ function Navbar() {
         <NavigationMenu>
           <NavigationMenuList className="flex items-center gap-2">
             <NavigationMenuItem>
-              <Button asChild variant={'outline'}>
+              <Button asChild variant={"outline"}>
                 <Link href="/signin">Sign In</Link>
               </Button>
             </NavigationMenuItem>
