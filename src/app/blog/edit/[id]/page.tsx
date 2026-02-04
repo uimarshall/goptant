@@ -1,5 +1,5 @@
-import WikiEditor from '@/components/BlogEditor';
-import { stackServerApp } from '@/stack/server';
+import WikiEditor from "@/components/BlogEditor";
+import { stackServerApp } from "@/stack/server";
 
 interface EditArticlePageProps {
   params: Promise<{
@@ -11,13 +11,13 @@ export default async function EditArticlePage({
   params,
 }: EditArticlePageProps) {
   // Here, we ensure the user is authenticated, we don't care about who the login user is. All we care about is whether they are logged in or not.
-  await stackServerApp.getUser({ or: 'redirect' });
+  await stackServerApp.getUser({ or: "redirect" });
   const { id } = await params;
 
   // In a real app, you would fetch the article data here
   // For now, we'll just show some mock data if it's not "new"
   const mockData =
-    id !== 'new'
+    id !== "new"
       ? {
           title: `Sample Article ${id}`,
           content: `# Sample Article ${id}

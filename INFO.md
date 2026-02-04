@@ -37,3 +37,27 @@ Server-side code never gets shipped to the client bundle, so it cannot be decomp
 ## In Stack Auth, what does the following code accomplish?
 
 It checks if a user is currently logged in (authenticated). If no user is found, it automatically redirects them to the sign-in page. This provides server-side protection for routes that require authentication.
+
+## Why must React server actions be protected with authentication checks even though they execute on the server?
+
+Server actions must be protected because they are essentially API endpoints (RPC - Remote Procedure Call). Anyone who knows the URL can call them by inspecting the network panel to find the endpoint and how it invokes the function. The data is still coming from the frontend to the backend, so they need to be treated with the same level of security as normal API endpoints.
+
+## What directive is used to define a React server action, and what security check should be implemented at the beginning of the function?
+
+The 'use server' directive is used to define a React server action. At the beginning of the function, you should get the current user with `await stackServerApp.getUser()` and throw an unauthorized error if no user exists to ensure only authenticated users can execute the action.
+
+## When creating an update article server action, why should the author ID be pulled from the authenticated user rather than accepted as input from the frontend?
+
+The author ID should be pulled from the authenticated user object (user.ID) rather than from frontend input because you should not trust the frontend with this information. This ensures that users can only modify articles with their own valid author ID, preventing unauthorized modifications.
+
+## In the CreateArticleInput type, what are the required properties and their types?
+
+The CreateArticleInput type includes: title (string), content (string), authorId (string), and imageUrl (optional string, denoted with a question mark). All properties are required except imageUrl which may or may not be provided.
+
+## What additional authorization check should be performed in update and delete server actions beyond verifying that a user is logged in?
+
+Beyond verifying that a user is logged in, update and delete actions should verify that the user is authorized to perform the specific operation on that particular resource. Just because someone is authenticated doesn't mean they can edit or delete any article - they should only be able to modify articles they have permission to access.
+
+## What type of API mechanism do React server actions implement under the hood?
+
+RPC - Remote Procedure Call
