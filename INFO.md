@@ -21,3 +21,19 @@ Using `@apply` is considered an anti-pattern because it creates a hybrid approac
 `Design tokens` are a pattern for defining consistent design values like colors, spacing, fonts, and breakpoints that can be reused throughout an application. Tailwind CSS encourages their use through its theming system, where you define values once in the configuration and they automatically become available as utility classes across the entire framework, making the 'happy path' also the 'right path' for consistent design.
 
 The `recommended approach` is to write Tailwind classes directly in your markup and avoid mixing in traditional CSS as much as possible. While Tailwind can be challenging to work with and debug, maintaining this consistency makes large codebases more maintainable. Mixing approaches by using features like @apply to write CSS files with Tailwind classes increases cognitive burden and reduces the framework's benefits.
+
+`Authentication` is determining who you are or whether you're logged in or not.
+
+`Authorization` is knowing who you are and determining whether you're allowed to access a specific resource or perform a specific action.
+
+## What are the three ways to protect a route in Next.js with authentication systems like Stack Auth?
+
+Client side protection (mainly for user experience convenience), server side protection (actual security enforcement), and middleware (for protecting entire directories or route groups, like an admin section).
+
+## Why is server-side route protection more secure than client-side route protection?
+
+Server-side code never gets shipped to the client bundle, so it cannot be decompiled or inspected by users. Client-side protection code is sent to the browser where users can potentially see all the code, URLs, and endpoints being used, making it only useful for UX but not actual security.
+
+## In Stack Auth, what does the following code accomplish?
+
+It checks if a user is currently logged in (authenticated). If no user is found, it automatically redirects them to the sign-in page. This provides server-side protection for routes that require authentication.
