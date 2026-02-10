@@ -9,7 +9,7 @@ assert(
   "DATABASE_URL environment variable is required",
 );
 
-const sql = neon(process.env.DATABASE_URL);
+export const sql = neon(process.env.DATABASE_URL);
 const db = drizzle(sql, { schema });
 
 export default db;
