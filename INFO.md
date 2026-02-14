@@ -3674,3 +3674,23 @@ export const articles = pgTable('articles', {
 - Maintains data consistency
 - Enforces business rules at database level
 - Makes your application more reliable
+
+## In Drizzle ORM, what method is used to add new records to a database table, and what method is chained to specify the data being added?
+
+The insert() method is used to add new records, and the values() method is chained to specify the data being added. For example: db.insert(articles).values({ title: data.title, content: data.content })
+
+## What is the purpose of the unary plus operator when working with database queries in Drizzle ORM?
+
+The unary plus operator converts a string to a number. This is necessary when the ID comes from the UI as a string but the database expects a number type for the ID field.
+
+## In Drizzle ORM, how do you update existing records in a database table?
+
+Use the update() method on the table, chain the set() method with the fields to update, and add a where() clause to specify which records to update. For example: db.update(articles).set({ title: data.title, content: data.content }).where(eq(articles.ID, +ID))
+
+## What three main CRUD operations does Drizzle ORM provide for database manipulation?
+
+Drizzle ORM provides insert() for creating records, select() for reading/querying records, update() with set() for modifying records, and delete() for removing records.
+
+## What is the recommended approach for handling errors that might occur during database operations in server actions?
+
+Use a try-catch block around the database operation and send the caught errors to an observability platform. This allows you to monitor and track errors that shouldn't normally occur, helping with debugging and system monitoring.
