@@ -3694,3 +3694,35 @@ Drizzle ORM provides insert() for creating records, select() for reading/queryin
 ## What is the recommended approach for handling errors that might occur during database operations in server actions?
 
 Use a try-catch block around the database operation and send the caught errors to an observability platform. This allows you to monitor and track errors that shouldn't normally occur, helping with debugging and system monitoring.
+
+## What is the difference between authentication (authn) and authorization (authz)?
+
+Authentication (authn) is the process of logging in, logging out, and signing up - it's about handshaking with the service and establishing who you are. Authorization (authz) is about determining what you are allowed to do once your identity is established - it defines permissions and access levels for authenticated users.
+
+## What does RBAC stand for, and what is it used for?
+
+RBAC stands for Role-Based Access Control (or Role-Based Authentication Control). It's an authorization system where users are assigned to teams or roles (like admin team or moderation team), and permissions are granted based on these role memberships. Users can perform actions based on which team or role they belong to.
+
+## In the following authorization function, why is the check for response.length performed before comparing author IDs?
+
+````const response = await db.select({
+authorID: articles.authorID
+})
+.from(articles)
+.where(eq(articles.id, articleID));
+
+if (!response.length) {
+return false;
+}
+return response[0].authorID === loggedInUserID;```
+````
+
+The length check verifies whether the article exists in the database before attempting to compare author IDs. This allows the function to disambiguate between two different failure cases: the article doesn't exist versus the user doesn't have permission to edit an existing article. This separation makes debugging and error handling clearer.
+
+## Why might someone choose to perform authorization checks in application code rather than using database WHERE clauses with multiple conditions?
+
+Performing authorization checks in application code provides several benefits: the code becomes more readable and maintainable, the functions are individually testable, and you can better disambiguate between different failure reasons (like resource doesn't exist versus user lacks permission). While slightly less performant, this approach is more maintainable and the performance difference is negligible for most applications that aren't operating at massive scale.
+
+## Why should authorization checks be applied to delete operations even if there's no delete button in the user interface?
+
+Authorization checks should be applied to all server-side operations, including delete, because the endpoint technically exists and could be invoked directly through API calls, even without a UI button. Relying solely on UI restrictions for security is insufficient - server-side validation is essential to prevent unauthorized access through direct API calls or potential security exploits.

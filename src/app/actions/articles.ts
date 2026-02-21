@@ -2,10 +2,10 @@
 
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
-// import { authorizeUserToEditArticle } from '@/db/authz';
+import { authorizeUserToEditArticle } from "@/db/authz";
 import db from "@/db/index";
 import { articles } from "@/db/schema";
-// import { ensureUserExists } from '@/db/sync-user';
+import { ensureUserExists } from "@/db/sync-user";
 import { stackServerApp } from "@/stack/server";
 
 // Server actions for articles (stubs)
@@ -30,7 +30,7 @@ export async function createArticle(data: CreateArticleInput) {
     throw new Error("❌ Unauthorized");
   }
 
-  // await ensureUserExists(user);
+  await ensureUserExists(user);
 
   console.log("✨ createArticle called:", data);
 
@@ -55,9 +55,9 @@ export async function updateArticle(id: string, data: UpdateArticleInput) {
     throw new Error("❌ Unauthorized");
   }
 
-  // if (!(await authorizeUserToEditArticle(user.id, +id))) {
-  //   throw new Error('❌ Forbidden');
-  // }
+  if (!(await authorizeUserToEditArticle(user.id, +id))) {
+    throw new Error("❌ Forbidden");
+  }
 
   console.log("📝 updateArticle called:", { id, ...data });
 
@@ -78,9 +78,9 @@ export async function deleteArticle(id: string) {
     throw new Error("❌ Unauthorized");
   }
 
-  // if (!(await authorizeUserToEditArticle(user.id, +id))) {
-  //   throw new Error('❌ Forbidden');
-  // }
+  if (!(await authorizeUserToEditArticle(user.id, +id))) {
+    throw new Error("❌ Forbidden");
+  }
 
   console.log("🗑️ deleteArticle called:", id);
 
