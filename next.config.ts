@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
   experimental: {
     turbopackFileSystemCacheForDev: true,
   },
+
+  images: {
+    remotePatterns: [new URL(`${process.env.BLOB_STORAGE_BASE_URL}/**`)],
+  },
   // turbopack: {
   //   root: dirname(__dirname),
   // },

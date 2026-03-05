@@ -3726,3 +3726,32 @@ Performing authorization checks in application code provides several benefits: t
 ## Why should authorization checks be applied to delete operations even if there's no delete button in the user interface?
 
 Authorization checks should be applied to all server-side operations, including delete, because the endpoint technically exists and could be invoked directly through API calls, even without a UI button. Relying solely on UI restrictions for security is insufficient - server-side validation is essential to prevent unauthorized access through direct API calls or potential security exploits.
+
+## What is the purpose of setting addRandomSuffix to true when uploading files to Vercel Blob storage?
+
+Setting addRandomSuffix to true prevents file name collisions. Without it, if multiple users upload files with the same name (like 'image.jpg'), the files would overwrite each other. The random suffix ensures each uploaded file has a unique name.
+
+## Why should undefined be used instead of null or empty string when conditionally setting optional fields in database updates?
+
+Using undefined means the field won't be set at all in the update operation, which preserves any existing value. Using null or empty string would explicitly set the field to that value, overwriting existing data. This is important when you want to leave existing values unchanged if no new value is provided.
+
+## What is the required environment variable name that the Vercel Blob SDK looks for, and why is the specific naming important?
+
+The required environment variable name is BLOB_READ_WRITE_TOKEN. The specific naming is important because the Vercel SDK specifically looks for this exact variable name in the environment. If it's called something else (like API_KEY), the SDK won't find it and authentication will fail.
+
+## What are the three parameters passed to the put function when uploading a file to Vercel Blob storage?
+
+const blob = await put(file.name, file, {
+access: 'public',
+addRandomSuffix: true
+});
+
+The three parameters are: 1) file.name - the name of the file being uploaded, 2) file - the actual file object containing the data, and 3) an options object containing access: 'public' (to make the file publicly accessible) and addRandomSuffix: true (to prevent name collisions).
+
+## What is blob storage and why is it called "blob"?
+
+Blob storage is a file system for storing unstructured data. It's called 'blob' (Binary Large Object) because the storage system doesn't care about the structure or type of the data being stored - it can store any type of file including images, videos, PDFs, or any other data format. The storage provider treats it all as unstructured data.
+
+## What automatic optimization does Vercel provide when using Next Image with blob storage?
+
+Automatic image compression and size optimisation for users.
