@@ -22,6 +22,7 @@
     "@radix-ui/react-slot": "^1.2.4",
     "@stackframe/stack": "^2.8.67",
     "@uiw/react-md-editor": "^4.0.11",
+    "@vercel/blob": "^2.3.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "^17.3.1",
