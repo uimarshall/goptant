@@ -1,5 +1,7 @@
 ## HELPING COPILOT HELP YOU
 
+Prompt Engineering is the practice of giving an AI model specific instructions to produce the results you want.
+
 > Prompt crafting best practices must include the following:
 
 1. Context.

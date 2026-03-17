@@ -1,8 +1,15 @@
-import { desc, eq, gt } from "drizzle-orm";
-import db from "@/db/index";
-import { articles, usersSync } from "@/db/schema";
+import { desc, eq, gt } from 'drizzle-orm';
+import db from '@/db/index';
+import { articles, usersSync } from '@/db/schema';
+import redis from '@/cache';
 
 export async function getArticles(cursor?: number, pageSize = 5) {
+  const cached = await redis.get('articles:all');
+  if (cached) {
+    console.log('🎯 Get Articles Cache Hit!');
+    return cached;
+  }
+
   const response = await db
     .select({
       title: articles.title,
@@ -16,6 +23,11 @@ export async function getArticles(cursor?: number, pageSize = 5) {
     .where(cursor ? gt(articles.id, cursor) : undefined)
     .limit(pageSize)
     .orderBy(desc(articles.id));
+
+  console.log('🙅‍♂️ Get Articles Cache Miss!');
+  redis.set('articles:all', response, {
+    ex: 60, // one minute
+  });
   return response;
 }
 
