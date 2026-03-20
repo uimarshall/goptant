@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   Calendar,
@@ -8,16 +8,16 @@ import {
   Home,
   Trash,
   User,
-} from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import ReactMarkdown from 'react-markdown';
-import { deleteArticleForm } from '@/app/actions/articles';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { incrementPageview } from '@/app/actions/pageviews';
-import { useEffect, useState } from 'react';
+} from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import { deleteArticleForm } from "@/app/actions/articles";
+import { incrementPageview } from "@/app/actions/pageviews";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface ViewerArticle {
   title: string;
@@ -43,10 +43,10 @@ export default function WikiArticleViewer({
   // Format date for display
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
@@ -84,7 +84,7 @@ export default function WikiArticleViewer({
           <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center">
               <User className="h-4 w-4 mr-1" />
-              <span>By {article.author ?? 'Unknown'}</span>
+              <span>By {article.author ?? "Unknown"}</span>
             </div>
             <div className="flex items-center">
               <Calendar className="h-4 w-4 mr-1" />
@@ -93,7 +93,7 @@ export default function WikiArticleViewer({
             <Badge variant="secondary">Article</Badge>
             <div className="ml-3 flex items-center text-sm text-muted-foreground">
               <Eye className="h-4 w-4 mr-1" />
-              <span>{localPageviews ? localPageviews : '—'}</span>
+              <span>{localPageviews ? localPageviews : "—"}</span>
               <span className="ml-1">views</span>
             </div>
             ;
