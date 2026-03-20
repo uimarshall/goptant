@@ -1,12 +1,12 @@
-import { desc, eq, gt } from 'drizzle-orm';
-import db from '@/db/index';
-import { articles, usersSync } from '@/db/schema';
-import redis from '@/cache';
+import { desc, eq, gt } from "drizzle-orm";
+import redis from "@/cache";
+import db from "@/db/index";
+import { articles, usersSync } from "@/db/schema";
 
 export async function getArticles(cursor?: number, pageSize = 5) {
-  const cached = await redis.get('articles:all');
+  const cached = await redis.get("articles:all");
   if (cached) {
-    console.log('🎯 Get Articles Cache Hit!');
+    console.log("🎯 Get Articles Cache Hit!");
     return cached;
   }
 
@@ -24,8 +24,8 @@ export async function getArticles(cursor?: number, pageSize = 5) {
     .limit(pageSize)
     .orderBy(desc(articles.id));
 
-  console.log('🙅‍♂️ Get Articles Cache Miss!');
-  redis.set('articles:all', response, {
+  console.log("🙅‍♂️ Get Articles Cache Miss!");
+  redis.set("articles:all", response, {
     ex: 60, // one minute
   });
   return response;

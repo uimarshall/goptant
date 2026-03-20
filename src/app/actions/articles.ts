@@ -1,13 +1,13 @@
-'use server';
+"use server";
 
-import { eq } from 'drizzle-orm';
-import { redirect } from 'next/navigation';
-import { authorizeUserToEditArticle } from '@/db/authz';
-import db from '@/db/index';
-import { articles } from '@/db/schema';
-import { ensureUserExists } from '@/db/sync-user';
-import { stackServerApp } from '@/stack/server';
-import redis from '@/cache';
+import { eq } from "drizzle-orm";
+import { redirect } from "next/navigation";
+import redis from "@/cache";
+import { authorizeUserToEditArticle } from "@/db/authz";
+import db from "@/db/index";
+import { articles } from "@/db/schema";
+import { ensureUserExists } from "@/db/sync-user";
+import { stackServerApp } from "@/stack/server";
 
 // Server actions for articles (stubs)
 // TODO: Replace with real database operations when ready
@@ -28,12 +28,12 @@ export type UpdateArticleInput = {
 export async function createArticle(data: CreateArticleInput) {
   const user = await stackServerApp.getUser();
   if (!user) {
-    throw new Error('❌ Unauthorized');
+    throw new Error("❌ Unauthorized");
   }
 
   await ensureUserExists(user);
 
-  console.log('✨ createArticle called:', data);
+  console.log("✨ createArticle called:", data);
 
   const response = await db
     .insert(articles)
@@ -47,21 +47,21 @@ export async function createArticle(data: CreateArticleInput) {
     .returning({ id: articles.id });
 
   const articleId = response[0]?.id;
-  redis.del('articles:all');
-  return { success: true, message: 'Article create logged', id: articleId };
+  redis.del("articles:all");
+  return { success: true, message: "Article create logged", id: articleId };
 }
 
 export async function updateArticle(id: string, data: UpdateArticleInput) {
   const user = await stackServerApp.getUser();
   if (!user) {
-    throw new Error('❌ Unauthorized');
+    throw new Error("❌ Unauthorized");
   }
 
   if (!(await authorizeUserToEditArticle(user.id, +id))) {
-    throw new Error('❌ Forbidden');
+    throw new Error("❌ Forbidden");
   }
 
-  console.log('📝 updateArticle called:', { id, ...data });
+  console.log("📝 updateArticle called:", { id, ...data });
 
   const _response = await db
     .update(articles)
@@ -78,14 +78,14 @@ export async function updateArticle(id: string, data: UpdateArticleInput) {
 export async function deleteArticle(id: string) {
   const user = await stackServerApp.getUser();
   if (!user) {
-    throw new Error('❌ Unauthorized');
+    throw new Error("❌ Unauthorized");
   }
 
   if (!(await authorizeUserToEditArticle(user.id, +id))) {
-    throw new Error('❌ Forbidden');
+    throw new Error("❌ Forbidden");
   }
 
-  console.log('🗑️ deleteArticle called:', id);
+  console.log("🗑️ deleteArticle called:", id);
 
   const _response = await db.delete(articles).where(eq(articles.id, +id));
 
@@ -94,12 +94,12 @@ export async function deleteArticle(id: string) {
 
 // Form-friendly server action: accepts FormData from a client form and calls deleteArticle
 export async function deleteArticleForm(formData: FormData): Promise<void> {
-  const id = formData.get('id');
+  const id = formData.get("id");
   if (!id) {
-    throw new Error('Missing article id');
+    throw new Error("Missing article id");
   }
 
   await deleteArticle(String(id));
   // After deleting, redirect the user back to the homepage.
-  redirect('/');
+  redirect("/");
 }

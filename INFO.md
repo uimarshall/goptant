@@ -3755,3 +3755,113 @@ Blob storage is a file system for storing unstructured data. It's called 'blob' 
 ## What automatic optimization does Vercel provide when using Next Image with blob storage?
 
 Automatic image compression and size optimisation for users.
+
+## What are the two main restrictions of Resend's free tier regarding email sending?
+
+On the free tier, you can only send emails to yourself (the email address you signed up with) and you can only send from Resend's domain (like resend.dev). Both restrictions are lifted once you set up a custom domain.
+
+## What is SES in the context of AWS?
+
+SES stands for Amazon Simple Email Service, which is AWS's email sending service. It provides a nicer experience compared to managing your own SMTP server.
+
+## What DNS records need to be configured when setting up a custom domain with Resend?
+
+You need to set up a text record and some MX (Mail Exchange) records for your domain. This typically takes around 10 minutes to propagate through DNS.
+
+## Why do email service providers like Resend have strict guardrails on their free tier services?
+
+Free tier services are often abused by users, particularly notification services like Resend (for spam) and free compute services (for cryptocurrency mining). These restrictions help prevent abuse.
+
+## What environment variable name should be used to store the Resend API key?
+
+The Resend API key should be stored in an environment variable called RESEND_API_KEY in the .env file.
+
+## What DNS records typically need to be configured when setting up a custom domain for email services?
+
+TXT and MX records.
+
+## What is the purpose of using a left join when querying article and user data to send a celebration email?
+
+A left join is used to connect the articles table with the user_sync table to retrieve the author's email address. Starting with an article ID, the join matches the author_ID from the articles table to the ID in the user_sync table, which allows access to the email field stored in the user_sync table.
+
+## When using Resend without a custom domain configured, what restrictions apply to sending emails?
+
+Without a custom domain, emails must be sent from 'onboarding@resend.dev' and can only be delivered to the email address that was used to sign up for the Resend account. Attempting to send to other email addresses will result in a forbidden error.
+
+## Why should email addresses be excluded from application logs, even when logging email-related operations?
+
+Email addresses should not be logged to maintain GDPR compliance and comply with similar privacy laws. If a user submits a GDPR request to be scrubbed from the system, you would need to go back through all logs and remove their email address. It's easier to never log emails in the first place.
+
+## What two parameters are required when calling the sendCelebrationEmail function?
+
+async function sendCelebrationEmail(
+articleId: number,
+pageViews: number
+)
+
+The function requires two parameters: articleId (a number representing the article's ID) and pageViews (a number representing how many page views the article has received). The articleId is used to query the database for the author's email, while pageViews is included in the celebration email message.
+
+## What is the structure of the 'from' field when sending an email with Resend using a custom domain?
+
+from: "Wiki Masters <no-reply@mail.holt.courses>"
+
+The 'from' field combines a display name with an email address in the format: 'Display Name email@domain.com'. The display name (Wiki Masters) appears to the recipient, while the email address must be from a custom domain that has been specifically configured with Resend.
+
+## What is the primary advantage of using React Email for composing emails?
+
+It provides a significantly improved developer experience compared to previous email composition methods
+
+## Why is it recommended to avoid logging email addresses in application logs?
+
+To maintain GDPR compliance and avoid having to scrub emails from logs during data deletion requests
+
+## What SQL operation is performed to retrieve the author's email address when given an article ID?
+
+const response = await DB
+.select({ email: usersSync.email, id: usersSync.id })
+.from(articles)
+.leftJoin(usersSync, eq(articles.authorId, usersSync.id))
+.where(eq(articles.id, articleId));
+
+A left join between the articles table and users sync table on the author ID
+
+## In a Next.js application using Redis, what array method can be used to check if a milestone value has been reached before sending a celebration email?
+
+The includes() method can be used to check if the new value is in the milestones array. For example: if (milestones.includes(newValue)) where milestones might be an array like [10, 50, 100, 10000].
+
+## When sending transactional emails in a background process, why might you choose not to use await on the email sending function?
+
+You don't need to await the email sending function because it can be scheduled to run in the background without blocking the main execution flow. The email will still be sent as long as the program doesn't crash or end, and not awaiting it prevents blocking the current process.
+
+## What is IP reputation in the context of email deliverability, and how does it affect whether emails reach the inbox or junk folder?
+
+IP reputation refers to how much email services like Gmail and Hotmail trust a particular IP address. The reputation is lowered when emails bounce or when fraud is detected from that IP. Higher reputation IPs have better deliverability rates and are more likely to reach inboxes rather than junk folders.
+
+## Why do emails sent to addresses at example.com typically bounce when testing transactional email functionality?
+
+Emails sent to example.com addresses bounce because example.com is a reserved domain name specifically designated for documentation and testing purposes. It's not a real email domain that accepts mail delivery.
+
+## In Resend or similar email services, why might free tier users experience lower email deliverability rates compared to paying customers?
+
+Free tier users are likely assigned to IP addresses with lower reputation because they tend to send more emails that bounce or are flagged as spam during testing. Email services typically reserve their high-reputation IPs for paying customers to ensure better deliverability rates for production use cases.
+
+## What is React Email and what email services is it compatible with?
+
+React Email is a next-generation tool for writing emails that is not specific to any single service. It works with multiple email providers including Resend, SendGrid, AWS SES, Postmark, and Azure email service.
+
+## Why must a TypeScript file containing React Email components be renamed with a .tsx extension instead of .ts?
+
+TypeScript, Vite, and related tools require the .tsx extension for files containing JSX/React components. Without the X on the end, the tooling doesn't recognize it as a React file and will throw errors.
+
+## What is the purpose of using process.env.VERCEL_URL when constructing a baseURL for email links, and what is the fallback value?
+
+When deployed to Vercel, process.env.VERCEL_URL is automatically populated with the correct base URL (including for preview environments). This allows dynamic construction of the baseURL as https://${process.env.VERCEL_URL} in production, with a fallback to http://localhost:3000 for local development.
+
+## In the code name ?? "friend", what does the ?? operator do?
+
+The ?? is the nullish coalescing operator. It returns the right-hand operand ("friend") when the left-hand operand (name) is null or undefined, otherwise it returns the left-hand operand (name).
+
+## What advantage does React Email provide when using Tailwind CSS for email styling?
+
+React Email is good at translating Tailwind CSS classes into proper email styling. This allows developers to write email templates using familiar Tailwind syntax, and React Email handles the conversion to email-compatible CSS.
+https://react.email/
