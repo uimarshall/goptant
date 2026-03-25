@@ -5,6 +5,7 @@ export const articles = pgTable("articles", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
   slug: text("slug").notNull().unique(),
+  summary: text("summary"),
   content: text("content").notNull(),
   imageUrl: text("image_url"),
   published: boolean("published").default(false).notNull(),

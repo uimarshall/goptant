@@ -1,3 +1,5 @@
+https://vercel.com/ai-gateway/models
+
 > layout.tsx
 
 The `layout.tsx` file defines a layout that is applied to every page in the application. It contains the HTML structure and wraps the children components that will be rendered on each page.
@@ -3865,3 +3867,107 @@ The ?? is the nullish coalescing operator. It returns the right-hand operand ("f
 
 React Email is good at translating Tailwind CSS classes into proper email styling. This allows developers to write email templates using familiar Tailwind syntax, and React Email handles the conversion to email-compatible CSS.
 https://react.email/
+
+## What is the Vercel AI SDK and what makes it useful for working with different AI providers?
+
+The Vercel AI SDK is a toolkit that simplifies working with AI models. It allows developers to easily switch between different AI providers (like OpenAI, Anthropic, etc.) by just changing the endpoint, while the SDK absorbs all the complexity. You can use it with Vercel's AI Gateway or connect directly to providers like OpenAI or Anthropic.
+
+## What are the advantages of using Ollama for AI inference, and what is its main limitation?
+
+Ollama allows you to run AI models locally without requiring API credits or a credit card. However, its main limitation is that it will only work locally and cannot be used in deployed production environments.
+
+## In the Vercel AI SDK, how do you switch from using Vercel's AI Gateway to querying Anthropic directly?
+
+https://openrouter.ai/pricing
+
+const result = await generateText({
+model: openai('gpt-4o-mini'),
+prompt: 'Your prompt here'
+});
+
+To switch to Anthropic directly, you need to:
+
+Install the @ai-sdk/anthropic package
+Import anthropic from the package
+Replace the model parameter with anthropic('claude-haiku-4.5') or another Claude model name
+import { anthropic } from '@ai-sdk/anthropic';
+
+const result = await generateText({
+model: anthropic('claude-haiku-4.5'),
+prompt: 'Your prompt here'
+});
+
+## Why is text summarization considered a particularly good use case for LLMs, and how should you approach model selection for this task?
+
+Text summarization is considered a perfect LLM use case because most models are naturally good at it. Since many models perform well at summarization, you can prioritize selecting models that are fastest and cheapest rather than focusing solely on quality. It's recommended to reevaluate your model choice every 2-3 months due to how fast the AI industry moves.
+
+## What is the recommended approach to writing effective prompts for AI models, and why is it important?
+
+It's worth spending significant time crafting detailed prompts rather than using basic ones. A good prompt should include multiple bounding boxes of instructions such as: the desired tone, target audience, call to action, content guidelines, and specific do's and don'ts. The Anthropic 10-step prompt approach is a good reference. Better prompts lead to significantly better AI outputs, making the time investment worthwhile.
+
+## What command is used to generate a new database migration after modifying a Drizzle schema?
+
+npm run db generate. This command detects changes in the schema, performs a diff, and generates the necessary migration files. After generation, you would run npm run db migrate to apply the migration.
+
+## How do you silence Biome linting errors for variables that are created but never read?
+
+You can prefix the variable name with an underscore. For example, instead of naming a variable 'result', you would name it '\_result'. Alternatively, you can choose not to store the value at all.
+
+## In Drizzle ORM, what SQL statement is generated when you add a new column to an existing table schema?
+
+Drizzle generates an ALTER TABLE statement with ADD COLUMN. For example, adding a summary column would generate: ALTER TABLE [table_name] ADD COLUMN summary TEXT.
+
+## What is a recommended approach for handling AI-generated summaries that might fail occasionally without blocking the main application flow?
+
+Use a cron job or scheduled task to handle summary generation. This makes the summary generation process failable and allows it to be retried later if it fails initially, rather than blocking the main article creation or update process.
+
+## How can you implement scheduled jobs (crons) in a Next.js application deployed on Vercel?
+
+Write an API route in Next.js and then configure Vercel via configuration files to call that API route on a schedule. This approach allows the framework itself to handle cron functionality.
+
+## How does Vercel execute scheduled cron jobs with Next.js?
+
+By calling an API route based on configuration
+
+## What is the naming convention for creating API routes in Next.js, and what URL pattern does it generate?
+
+API routes in Next.js are created by placing a route.ts file within a folder structure under the api directory. For example, creating api/summary/route.ts will generate an endpoint at /api/summary.
+
+## How does Vercel secure cron job endpoints from unauthorized public access, and how is local development handled?
+
+Vercel provides a CRON_SECRET environment variable and passes it as an authorization header to the endpoint. The endpoint checks if NODE_ENV is 'dev' to allow local testing, or verifies that the authorization header matches bearer ${process.env.CRON_SECRET} in production. If neither condition is met, it returns a 401 unauthorized response.
+
+## What is the structure of a vercel.json file for defining cron jobs?
+
+The vercel.json file contains a crons array with objects specifying a path (the API endpoint to call) and a schedule (a cron expression). For example:
+
+```
+{
+  "crons": [
+    {
+      "path": "/api/summary",
+      "schedule": "0 0 * * 0"
+    }
+  ]
+}
+```
+
+## What Drizzle ORM function is used to filter database rows where a column value is null?
+
+The isNull() function from drizzle-orm is used in a where() clause to filter rows where a column value is null. For example: where(isNull(articles.summary)) would select all articles where the summary column is null.
+
+## Why is error handling with try-catch particularly important in cron jobs that run on the application server?
+
+Error handling is critical because cron jobs add artificial load to the application server. Without proper try-catch blocks, a failing job could crash the entire server, which would slow down or interrupt service for users. Defensive error handling ensures that job failures don't bring down the main application.
+
+## What is the correct directory structure for creating an API endpoint in Next.js?
+
+> source/app/api/[endpoint-name]/route.ts
+
+## How does Vercel authenticate cron job requests to prevent unauthorized public access?
+
+By checking if the authorization header contains a bearer token with the CRON_SECRET environment variable
+
+## What query is used to select articles that haven't been summarized yet using Drizzle ORM?
+
+db.select({ id: articles.id, title: articles.title, content: articles.content }) .from(articles) .where(isNull(articles.summary))
